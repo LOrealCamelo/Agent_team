@@ -9,6 +9,7 @@ import {
 } from "./agents/pm";
 import { draftDmReply, flagSafetyEscalation } from "./agents/scribe";
 import { generateLivePack } from "./agents/researcher";
+import { formatHealthReport, runAllChecks } from "./lib/health";
 
 const SAFETY_TRIGGERS = /\b(suicide|kill myself|want to die|end it all|self[\s-]?harm|hurt myself)\b/i;
 
@@ -20,8 +21,14 @@ bot.command("start", async (ctx) => {
 
 bot.command("help", async (ctx) => {
   await ctx.reply(
-    "Commands:\n/today — top 3 MITs\n/braindump <text> — Eisenhower triage in 10s\n/scribe <dm text> — Scribe drafts a reply\n/research — today's Live pack (3 topics + 1 stat)\n/done <task_id> /snooze <task_id>\n\n47620",
+    "Commands:\n/today — top 3 MITs\n/braindump <text> — Eisenhower triage in 10s\n/scribe <dm text> — Scribe drafts a reply\n/research — today's Live pack (3 topics + 1 stat)\n/done <task_id> /snooze <task_id>\n/status — health check of every service\n\n47620",
   );
+});
+
+bot.command("status", async (ctx) => {
+  await ctx.reply("Pinging services... 5sec.\n\n47620");
+  const checks = await runAllChecks();
+  await ctx.reply(formatHealthReport(checks));
 });
 
 bot.command("today", async (ctx) => {
@@ -133,10 +140,18 @@ cron.schedule(
 );
 
 bot.start({
-  onStart: (botInfo) => {
+  onStart: async (botInfo) => {
     console.log(`UltronOS online as @${botInfo.username}`);
     console.log(`Cron: 7am Researcher + 8am PM (${config.timezone})`);
     console.log(`Agents wired: PM (Opus 4.7), Scribe (Sonnet 4.6), Researcher (Sonnet 4.6)`);
+    try {
+      const checks = await runAllChecks();
+      await sendToCommander(
+        `🚀 UltronOS just deployed — boot health check:\n\n${formatHealthReport(checks).split("\n").slice(2).join("\n")}`,
+      );
+    } catch (err) {
+      console.error("Startup ping failed:", err);
+    }
   },
 });
 
