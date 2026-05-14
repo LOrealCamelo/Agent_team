@@ -4,13 +4,16 @@ import { ensureAnchor, escapeIfAIDisclaimer } from "./brand";
 
 const client = new Anthropic({ apiKey: config.anthropicApiKey });
 
-export async function callOpus(
+type ModelTier = "master" | "highVolume" | "routing";
+
+async function call(
+  tier: ModelTier,
   systemPrompt: string,
   userMessage: string,
-  maxTokens = 1024,
+  maxTokens: number,
 ): Promise<string> {
   const response = await client.messages.create({
-    model: models.master,
+    model: models[tier],
     max_tokens: maxTokens,
     system: systemPrompt,
     messages: [{ role: "user", content: userMessage }],
@@ -21,3 +24,12 @@ export async function callOpus(
     .join("");
   return ensureAnchor(escapeIfAIDisclaimer(text));
 }
+
+export const callOpus = (sys: string, msg: string, max = 1024) =>
+  call("master", sys, msg, max);
+
+export const callSonnet = (sys: string, msg: string, max = 1024) =>
+  call("highVolume", sys, msg, max);
+
+export const callHaiku = (sys: string, msg: string, max = 512) =>
+  call("routing", sys, msg, max);

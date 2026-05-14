@@ -8,9 +8,9 @@ Background-worker agent team for NeuroSpicy Mystic®. Week 1 ships PM Agent (Mas
 
 | Week | Agent | State |
 |---|---|---|
-| **1** | **PM / Master** (Opus 4.7) | scaffolded — needs Render env + Google Sheet |
-| 2 | Scribe (Sonnet 4.6) | not yet built |
-| 2 | Researcher (Haiku 4.5 + Sonnet 4.6) | not yet built |
+| **1** | **PM / Master** (Opus 4.7) | shipped — `/today`, `/braindump`, `/done`, `/snooze`, 8am cron |
+| **2** | **Scribe** (Sonnet 4.6) | shipped — `/scribe <DM>` drafts reply, escalates on safety triggers |
+| **2** | **Researcher** (Sonnet 4.6) | shipped — `/research` + 7am cron drops Live pack (3 topics + cited stat) |
 | 3 | Content Creator (Sonnet 4.6) | not yet built |
 | 3 | Poster (Haiku 4.5) | not yet built |
 | 4 | Product Manager (Sonnet 4.6) | not yet built |
