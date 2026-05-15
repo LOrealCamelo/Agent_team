@@ -10,7 +10,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
-    "init-sheet": "ts-node src/init-sheet.ts"
+    "init-sheet": "ts-node src/init-sheet.ts",
+    "oauth-bootstrap": "ts-node src/oauth-bootstrap.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",

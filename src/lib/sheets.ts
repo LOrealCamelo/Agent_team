@@ -21,13 +21,14 @@ let sheetsClient: sheets_v4.Sheets | null = null;
 
 function getClient(): sheets_v4.Sheets {
   if (sheetsClient) return sheetsClient;
-  const creds = JSON.parse(config.googleServiceAccountJson);
-  const auth = new google.auth.JWT({
-    email: creds.client_email,
-    key: creds.private_key,
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  const oauth2Client = new google.auth.OAuth2(
+    config.googleOAuthClientId,
+    config.googleOAuthClientSecret,
+  );
+  oauth2Client.setCredentials({
+    refresh_token: config.googleOAuthRefreshToken,
   });
-  sheetsClient = google.sheets({ version: "v4", auth });
+  sheetsClient = google.sheets({ version: "v4", auth: oauth2Client });
   return sheetsClient;
 }
 
