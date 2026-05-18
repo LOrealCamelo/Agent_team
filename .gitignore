@@ -5,3 +5,8 @@ dist/
 secrets/
 *.log
 .DS_Store
+
+# Credentials — never commit
+neurospicy-ceo-*.json
+*-service-account*.json
+.claude.json
