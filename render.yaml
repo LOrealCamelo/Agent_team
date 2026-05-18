@@ -1,4 +1,7 @@
 services:
+  # ----------------------------------------------------------
+  # PM Agent worker (cron + telegram) — unchanged
+  # ----------------------------------------------------------
   - type: worker
     name: ultronos-pm-agent
     runtime: node
@@ -21,3 +24,27 @@ services:
         sync: false
       - key: TIMEZONE
         value: America/New_York
+
+  # ----------------------------------------------------------
+  # Dashboard API — web service for the AI Agent Operations Hub dashboard
+  # Endpoints: /api/health, /api/agents, /api/agents/:id/start, etc.
+  # Astra (trend) /start triggers a real Claude call for Etsy ideation.
+  # ----------------------------------------------------------
+  - type: web
+    name: ultronos-dashboard-api
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: node dist/api-server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      # The API only needs ANTHROPIC_API_KEY. Others are unused by api-server.ts.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Optional: which Claude model Astra uses. Default haiku-4-5 (cheap + fast).
+      - key: ANTHROPIC_MODEL
+        value: claude-haiku-4-5-20251001
+      # PORT is auto-injected by Render — api-server.ts already reads it.

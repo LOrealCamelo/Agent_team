@@ -18,8 +18,8 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { apiRouter } from "./api/routes.js";
-import { tickSimulator } from "./api/state.js";
+import { apiRouter } from "./api/routes";
+import { tickSimulator } from "./api/state";
 
 const app = express();
 app.use(cors());

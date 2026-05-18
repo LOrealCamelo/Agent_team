@@ -5,8 +5,8 @@
  */
 
 import { Router, type Request, type Response } from "express";
-import { store } from "./state.js";
-import { runResearchAgent } from "./research.js";
+import { store } from "./state";
+import { runResearchAgent } from "./research";
 
 export const apiRouter = Router();
 
@@ -62,18 +62,16 @@ apiRouter.post("/agents/:id/start", async (req: Request, res: Response) => {
   const a = store.get(req.params.id);
   if (!a) { res.status(404).json({ ok: false, error: "agent not found" }); return; }
 
-  // Phase 3: Research Agent calls real AI.
-  if (a.id === "research") {
-    store.start("research");
-    // Kick off the real AI call (non-blocking-ish: we await to return ideas
-    // synchronously since the user wanted results returned to the dashboard).
+  // Phase 3: Astra (trend) calls real AI for Etsy product ideation.
+  if (a.id === "trend") {
+    store.start("trend");
     try {
       const ideas = await runResearchAgent();
-      res.json({ ok: true, agent: store.get("research"), result: ideas });
+      res.json({ ok: true, agent: store.get("trend"), result: ideas });
       return;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      res.status(500).json({ ok: false, error: msg, agent: store.get("research") });
+      res.status(500).json({ ok: false, error: msg, agent: store.get("trend") });
       return;
     }
   }

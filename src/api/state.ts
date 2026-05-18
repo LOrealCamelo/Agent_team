@@ -1,8 +1,8 @@
 /**
  * In-memory agent state for the dashboard API.
- * Mock-first: no DB, no real agent execution (except Research Agent in research.ts).
+ * Mock-first: no DB, no real agent execution (except Astra/trend in research.ts).
  *
- * Mirrors the schema the frontend expects.
+ * Mirrors the ULTRONOS agent roster the v1 dashboard expects.
  */
 
 export type AgentStatus =
@@ -14,7 +14,7 @@ export type AgentStatus =
   | "error";
 
 export interface AgentLog {
-  timestamp: string; // ISO
+  timestamp: string;
   message: string;
   level: "info" | "ok" | "warn" | "err";
 }
@@ -25,13 +25,13 @@ export interface Agent {
   role: string;
   status: AgentStatus;
   currentTask: string | null;
-  progress: number; // 0–100
+  progress: number;
   lastAction: string;
   logs: AgentLog[];
   active: boolean;
   createdAt: string;
   updatedAt: string;
-  result?: unknown; // populated by Research Agent in Phase 3
+  result?: unknown; // populated by Astra after AI call
 }
 
 export interface Task {
@@ -45,16 +45,24 @@ export interface Task {
 const now = () => new Date().toISOString();
 const id = () => Math.random().toString(36).slice(2, 10);
 
+/**
+ * ULTRONOS roster — matches v1 dashboard chambers exactly.
+ * Chamber data-room → agent id mapping:
+ *   trend → Astra, ideas → Vega, script → Nova, image → Pixel,
+ *   listing → Forge, seo → Sage, qa → Lumen, publish → Atlas,
+ *   msg → Echo, sales → Oracle
+ */
 const AGENT_DEFS: Array<{ id: string; name: string; role: string }> = [
-  { id: "research", name: "Research Agent", role: "Scanning sources & gathering context" },
-  { id: "plan", name: "Planning Agent", role: "Architecting solutions & breaking down work" },
-  { id: "code", name: "Code Agent", role: "Writing & refactoring code" },
-  { id: "test", name: "Test Agent", role: "Running & writing test suites" },
-  { id: "qa", name: "QA Agent", role: "Reviewing PRs & validating quality" },
-  { id: "deploy", name: "Deploy Agent", role: "Deploying releases to production" },
-  { id: "voice", name: "Voice Agent", role: "Listening & responding on phone channels" },
-  { id: "chatbot", name: "Chatbot Agent", role: "Conversational AI on web & messaging" },
-  { id: "analytics", name: "Analytics Agent", role: "Insights, reports & monitoring" },
+  { id: "trend",   name: "Astra",  role: "Recon Analyst — trend research & competitive scans" },
+  { id: "ideas",   name: "Vega",   role: "Ideation — digital product concepts" },
+  { id: "script",  name: "Nova",   role: "Copy Synth — voiceover, descriptions, scripts" },
+  { id: "image",   name: "Pixel",  role: "Visual Forge — mockup & image generation" },
+  { id: "listing", name: "Forge",  role: "Listing Smith — Etsy SKU assembly" },
+  { id: "seo",     name: "Sage",   role: "Keyword Oracle — title & tag optimization" },
+  { id: "qa",      name: "Lumen",  role: "Integrity Audit — mockup & listing QA" },
+  { id: "publish", name: "Atlas",  role: "Deploy Engineer — Printify/Etsy publishing" },
+  { id: "msg",     name: "Echo",   role: "Support Liaison — customer messages" },
+  { id: "sales",   name: "Oracle", role: "Revenue Sentinel — analytics & forecasts" },
 ];
 
 function createAgent(def: { id: string; name: string; role: string }): Agent {
@@ -147,13 +155,7 @@ class AgentStore {
   }
 
   createTask(agentId: string, description: string): Task {
-    const t: Task = {
-      id: id(),
-      agentId,
-      description,
-      status: "queued",
-      createdAt: now(),
-    };
+    const t: Task = { id: id(), agentId, description, status: "queued", createdAt: now() };
     this.tasks.push(t);
     return t;
   }
@@ -161,21 +163,18 @@ class AgentStore {
 
 export const store = new AgentStore();
 
-/**
- * Mock simulator — drives agent state forward like the frontend does, but
- * server-side so the dashboard can poll and see live changes.
- * Disabled until at least one agent is started.
- */
+/** Task pools — varied per ULTRONOS agent */
 const TASK_POOLS: Record<string, string[]> = {
-  research: ["Indexing 142 docs", "Cross-referencing repos", "Summarizing changelogs"],
-  plan: ["Drafting architecture", "Breaking down tickets", "Sequencing pipeline"],
-  code: ["Implementing endpoint", "Refactoring session store", "Patching middleware"],
-  test: ["Running jest suite", "Playwright e2e", "Fuzz testing endpoint"],
-  qa: ["Reviewing PR", "Auditing accessibility", "Verifying spec compliance"],
-  deploy: ["Rolling canary", "Promoting to staging", "Cutting hotfix"],
-  voice: ["Handling inbound call", "Transcribing voicemail", "Routing escalation"],
-  chatbot: ["Resolving conversation", "Updating intent classifier", "Drafting reply"],
-  analytics: ["Generating weekly report", "Computing funnel", "Flagging anomaly"],
+  trend:   ["Scraping etsy comp set", "Indexing 142 trending listings", "Pulling top tags from arxiv"],
+  ideas:   ["Drafting 'moon ritual v3' concept", "Brainstorming birthstone bundle", "Pitching minimalist witch pack"],
+  script:  ["Writing 'Lunar Affirmations 3.0' copy", "Drafting voiceover for ritual deck", "Polishing product description"],
+  image:   ["Rendering cover art 9/12", "Generating mockup batch #67", "Compositing tarot card variants"],
+  listing: ["Assembling SKU MN-LR-014", "Building Printify product entry", "Wiring variants & pricing"],
+  seo:     ["Optimizing title for +18% CTR", "Researching long-tail keywords", "Tagging witchy/tarot/moon"],
+  qa:      ["31-point compliance pass", "Flagging blurry mockup batch", "Reviewing draft listings"],
+  publish: ["Pushing Velvet Tarot Deck → live", "Promoting hoodie variant to Etsy", "Cutting v9.4.3 release"],
+  msg:     ["Responding to 3 tickets", "Processing 1 refund request", "Drafting reply to slack thread"],
+  sales:   ["Generating weekly report", "Computing 24h revenue delta", "Flagging conversion drop"],
 };
 
 function pick<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -184,9 +183,8 @@ function rand(a: number, b: number) { return a + Math.random() * (b - a); }
 export function tickSimulator() {
   for (const a of store.agents) {
     if (!a.active) continue;
-    // Research Agent is driven by real AI calls in Phase 3 — skip its sim
-    // once a result has been attached (we don't want to overwrite it).
-    if (a.id === "research" && a.result) continue;
+    // Astra (trend) is driven by real AI when result is present — don't overwrite it
+    if (a.id === "trend" && a.result) continue;
 
     switch (a.status) {
       case "idle":
@@ -216,13 +214,11 @@ export function tickSimulator() {
         }
         break;
       case "complete":
-        // Loop after brief dwell — set progress to 0 + back to idle next tick
         a.status = "idle";
         a.progress = 0;
         a.currentTask = null;
         break;
       case "error":
-        // Stay until explicit start/reset
         break;
       case "waiting":
         a.status = "working";
