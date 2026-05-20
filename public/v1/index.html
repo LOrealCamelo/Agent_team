@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ULTRONOS // Autonomous Store Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Press+Start+2P&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Atmospheric overlays -->
+<div class="stars" aria-hidden="true"></div>
+<div class="nebula" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- Ambient colored glow layers (so glass panels have something colorful to refract) -->
+<div class="ambient-glow ambient-glow--purple" aria-hidden="true"></div>
+<div class="ambient-glow ambient-glow--blue" aria-hidden="true"></div>
+<div class="ambient-glow ambient-glow--gold" aria-hidden="true"></div>
+
+<!-- ====================== TOP HUD ====================== -->
+<header class="hud-top">
+  <div class="hud-top__left">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" class="brand-mark">
+        <polygon points="20,2 38,12 38,28 20,38 2,28 2,12" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="20,8 32,15 32,25 20,32 8,25 8,15" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+        <circle cx="20" cy="20" r="3" fill="currentColor"/>
+      </svg>
+      <div class="brand__text">ULTRONOS<span class="dim">08</span></div>
+    </div>
+    <div class="hud-pill"><span class="dot green"></span>FACTORY DECK</div>
+    <div class="hud-pill ghost"><span class="dot green pulse"></span>STATION ONLINE</div>
+    <div class="hud-pill ghost cyan">PRINTIFY · ETSY LIVE</div>
+  </div>
+
+  <div class="hud-top__right">
+    <div class="hud-day">
+      <span class="hud-day__label">Day</span>
+      <span class="hud-day__num" id="stat-day">047</span>
+      <span class="hud-day__sep">—</span>
+      <span class="hud-day__time" id="hud-clock">12:08</span>
+      <span class="hud-day__dot"></span>
+    </div>
+    <div class="speed-ctrl">
+      <button class="speed-btn" data-speed="0">⏸</button>
+      <button class="speed-btn active" data-speed="1">▶ 1×</button>
+      <button class="speed-btn" data-speed="2">▶▶ 2×</button>
+      <button class="speed-btn" data-speed="5">▶▶▶ 5×</button>
+      <button class="speed-btn" data-speed="10">↥ 10×</button>
+    </div>
+    <div class="hud-stats">
+      <div class="hs"><span class="hs__l">REVENUE:</span><span class="hs__v green">$<span id="stat-revenue">4,908.72</span></span></div>
+      <div class="hs"><span class="hs__l">ORDERS:</span><span class="hs__v cyan" id="stat-orders">8</span></div>
+      <div class="hs"><span class="hs__l">PRODUCTS:</span><span class="hs__v pink"><span id="stat-products">10</span> LIVE</span></div>
+      <div class="hs"><span class="hs__l">AGENTS:</span><span class="hs__v amber"><span id="stat-agents-active">5</span>/<span id="stat-agents-total">6</span> ACTIVE</span></div>
+      <div class="hs"><span class="hs__l">HEALTH:</span><span class="hs__v green"><span class="dot green pulse"></span>NOMINAL</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====================== MAIN DECK ====================== -->
+<main class="deck">
+
+  <!-- LEFT COLUMN -->
+  <aside class="left-col">
+
+    <!-- Agent popup -->
+    <div class="agent-popup">
+      <div class="agent-popup__head">
+        <div class="agent-popup__icon" id="popup-icon">⚙</div>
+        <div class="agent-popup__title">
+          <span class="apt__name" id="popup-name">Factory</span>
+          <span class="apt__hot">L1</span>
+        </div>
+        <div class="agent-popup__sub" id="popup-sub">production</div>
+        <button class="agent-popup__close">×</button>
+      </div>
+      <div class="agent-popup__stats">
+        <div class="aps"><div class="aps__l">INCOME</div><div class="aps__v" id="popup-income">N/A</div></div>
+        <div class="aps"><div class="aps__l">AGENT</div><div class="aps__v"><span class="dot green"></span><span id="popup-agent">Forge</span></div></div>
+        <div class="aps"><div class="aps__l">AUTOMATIONS</div><div class="aps__v" id="popup-autos">6 active</div></div>
+        <div class="aps"><div class="aps__l">PRODUCED</div><div class="aps__v" id="popup-produced">400 items</div></div>
+      </div>
+      <div class="agent-popup__actions">
+        <button class="apa">UPGRADE</button>
+        <button class="apa">MANAGE</button>
+        <button class="apa primary">INFO</button>
+      </div>
+      <div class="agent-popup__footer">
+        <span>Tasks: <b id="popup-tasks">17</b></span>
+        <span>Active: <b id="popup-active">2h 14m</b></span>
+        <span class="dim">Press I to toggle</span>
+      </div>
+    </div>
+
+    <!-- Commander -->
+    <div class="commander panel--corners">
+      <div class="commander__head">
+        <div class="commander__icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="commander__title">COMMANDER</div>
+      </div>
+      <div class="commander__level">
+        <div class="commander__lv">LV.<b>4</b></div>
+        <div class="commander__role">Commander</div>
+      </div>
+      <div class="commander__xp">
+        <div class="xp__bar"><div class="xp__fill" style="--w:70.6%"></div></div>
+        <div class="xp__nums"><b>5,650 XP</b><span>8,000 XP</span></div>
+      </div>
+    </div>
+
+    <!-- Missions -->
+    <div class="panel panel--corners panel--missions">
+      <div class="panel__head">
+        <span class="panel__title">ACTIVE MISSIONS</span>
+        <span class="panel__tag">6 OPEN</span>
+      </div>
+      <ul class="missions">
+        <li class="mission"><div class="mission__icon money">$</div><div class="mission__body"><div class="mission__title">Reach $2,000 Revenue</div><div class="mission__bar"><div class="mission__fill" style="--w:91%"></div></div><div class="mission__meta"><span>$1,820 / $2,000</span><span class="reward">+500 XP</span></div></div></li>
+        <li class="mission"><div class="mission__icon cube">⬢</div><div class="mission__body"><div class="mission__title">Publish 5 New Listings</div><div class="mission__bar"><div class="mission__fill" style="--w:60%"></div></div><div class="mission__meta"><span>3 / 5</span><span class="reward">+300 XP</span></div></div></li>
+        <li class="mission"><div class="mission__icon cart">◈</div><div class="mission__body"><div class="mission__title">Get 50 Total Sales</div><div class="mission__bar"><div class="mission__fill" style="--w:66%"></div></div><div class="mission__meta"><span>33 / 50</span><span class="reward">+400 XP</span></div></div></li>
+        <li class="mission"><div class="mission__icon img">◉</div><div class="mission__body"><div class="mission__title">Generate 20 Mockups</div><div class="mission__bar"><div class="mission__fill" style="--w:45%"></div></div><div class="mission__meta"><span>9 / 20</span><span class="reward">+250 XP</span></div></div></li>
+        <li class="mission"><div class="mission__icon msg">✉</div><div class="mission__body"><div class="mission__title">Respond to 15 Messages</div><div class="mission__bar"><div class="mission__fill" style="--w:73%"></div></div><div class="mission__meta"><span>11 / 15</span><span class="reward">+200 XP</span></div></li>
+        <li class="mission"><div class="mission__icon qa">◐</div><div class="mission__body"><div class="mission__title">QA Pass All Drafts</div><div class="mission__bar"><div class="mission__fill" style="--w:80%"></div></div><div class="mission__meta"><span>8 / 10</span><span class="reward">+200 XP</span></div></li>
+      </ul>
+    </div>
+
+    <!-- Achievement -->
+    <div class="panel panel--corners panel--ach">
+      <div class="panel__head">
+        <span class="panel__title">LATEST ACHIEVEMENT</span>
+        <span class="panel__tag glow">UNLOCKED</span>
+      </div>
+      <div class="achievement">
+        <div class="achievement__badge">
+          <svg viewBox="0 0 60 60"><polygon points="30,4 55,18 55,42 30,56 5,42 5,18" fill="none" stroke="currentColor" stroke-width="1.5"/><polygon points="30,12 48,22 48,38 30,48 12,38 12,22" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.5"/><text x="30" y="38" text-anchor="middle" font-size="22" font-family="Orbitron" font-weight="900" fill="currentColor">★</text></svg>
+        </div>
+        <div class="achievement__body">
+          <div class="achievement__title">GRAND OPENING</div>
+          <div class="achievement__sub">$1,000 revenue milestone</div>
+          <div class="achievement__meta">Unlocked 4d ago • +150 XP</div>
+        </div>
+      </div>
+      <div class="achievement__progress">
+        <div class="ap__label"><span>$6,000</span><span>/</span><span>$10,000</span></div>
+        <div class="ap__bar"><div class="ap__fill" style="--w:60%"></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTER -->
+  <section class="station">
+    <div class="station__chrome">
+      <div class="chrome chrome--tl"></div><div class="chrome chrome--tr"></div>
+      <div class="chrome chrome--bl"></div><div class="chrome chrome--br"></div>
+      <div class="station__label"><span>FACTORY DECK //</span> ETSY OPERATIONS // ZONE-A</div>
+      <div class="station__compass"><span>N</span></div>
+    </div>
+
+    <div class="factory-grid">
+
+      <!-- R1: TREND RESEARCH -->
+      <article class="chamber chamber--scan" data-room="trend" data-agent="Astra">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--grid"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-01</span><span class="cm-status status--scan">◐ SCANNING</span></div>
+        <div class="chamber__sign"><span>TREND</span> RESEARCH</div>
+        <div class="eq-dome">
+          <div class="dome-rings"><span></span><span></span><span></span></div>
+          <div class="dome-sweep"></div>
+          <div class="dome-center"></div>
+        </div>
+        <div class="console console--tl"></div><div class="console console--tr"></div>
+        <div class="console console--bl"><span class="led"></span><span class="led g"></span><span class="led"></span></div>
+        <div class="console console--br"></div>
+        <div class="char char--cyan" style="--cx:62%;--cy:62%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:62%;--cy:62%">ASTRA</div>
+        <div class="chamber__hud">
+          <div class="ch-bar"><div class="ch-bar__fill" style="--w:38%"></div></div>
+          <div class="ch-meta"><span>scraping 142 listings</span><span>38%</span></div>
+        </div>
+      </article>
+
+      <!-- R2: PRODUCT IDEAS -->
+      <article class="chamber chamber--ideas" data-room="ideas" data-agent="Vega">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--metal"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-02</span><span class="cm-status status--working">● WORKING</span></div>
+        <div class="chamber__sign"><span>PRODUCT</span> IDEAS</div>
+        <div class="eq-tubes"><div class="tube tube--1"></div><div class="tube tube--2"></div><div class="tube tube--3"></div></div>
+        <div class="idea-bulb b1">💡</div><div class="idea-bulb b2">⬢</div><div class="idea-bulb b3">✦</div>
+        <div class="char char--violet" style="--cx:50%;--cy:62%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:50%;--cy:62%">VEGA</div>
+        <div class="chamber__hud">
+          <div class="ch-bar"><div class="ch-bar__fill amber" style="--w:64%"></div></div>
+          <div class="ch-meta"><span>"birthstone moon ritual v3"</span><span>64%</span></div>
+        </div>
+      </article>
+
+      <!-- R3: SCRIPT / COPY -->
+      <article class="chamber chamber--script" data-room="script" data-agent="Nova">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--cyan"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-03</span><span class="cm-status status--working">● WORKING</span></div>
+        <div class="chamber__sign"><span>SCRIPT /</span> COPY</div>
+        <div class="eq-altar">
+          <div class="altar-arch"></div><div class="altar-pad"></div><div class="altar-glow"></div>
+        </div>
+        <div class="text-rain"><span>01</span><span>10</span><span>11</span><span>00</span><span>01</span><span>10</span><span>11</span><span>01</span><span>00</span></div>
+        <div class="char char--magenta" style="--cx:50%;--cy:62%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:50%;--cy:62%">NOVA</div>
+        <div class="chamber__hud">
+          <div class="ch-bar"><div class="ch-bar__fill" style="--w:81%"></div></div>
+          <div class="ch-meta"><span>"Lunar Affirmations 3.0"</span><span>81%</span></div>
+        </div>
+      </article>
+
+      <!-- R4: IMAGE GEN -->
+      <article class="chamber chamber--image" data-room="image" data-agent="Pixel">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--tech"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-04</span><span class="cm-status status--working">● RENDERING</span></div>
+        <div class="chamber__sign"><span>IMAGE</span> GENERATION</div>
+        <div class="eq-printer">
+          <div class="printer-frame"></div><div class="printer-light"></div>
+          <div class="printer-arm"></div><div class="printer-out"></div>
+        </div>
+        <div class="swatches">
+          <span style="--c:#ff2e8e"></span><span style="--c:#ff9b3d"></span><span style="--c:#6effb0"></span>
+          <span style="--c:#00e5ff"></span><span style="--c:#9d7cff"></span><span style="--c:#ffd83d"></span>
+        </div>
+        <div class="char char--orange" style="--cx:50%;--cy:58%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:50%;--cy:58%">PIXEL</div>
+        <div class="chamber__hud">
+          <div class="ch-bar"><div class="ch-bar__fill" style="--w:75%"></div></div>
+          <div class="ch-meta"><span>rendering cover art • 9/12</span><span>75%</span></div>
+        </div>
+      </article>
+
+      <!-- R5: LISTING FORGE -->
+      <article class="chamber chamber--forge" data-room="listing" data-agent="Forge">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--hex"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-05 // HUB</span><span class="cm-status status--working">● BUILDING</span></div>
+        <div class="chamber__sign"><span>LISTING</span> FORGE</div>
+        <div class="eq-anvil">
+          <div class="anvil-base"></div><div class="anvil-block"></div>
+          <div class="anvil-sparks"><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="char char--amber" style="--cx:38%;--cy:55%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:38%;--cy:55%">FORGE</div>
+        <div class="char char--cyan small" style="--cx:65%;--cy:62%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char char--green small" style="--cx:30%;--cy:30%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="chamber__hud">
+          <div class="ch-bar"><div class="ch-bar__fill amber" style="--w:52%"></div></div>
+          <div class="ch-meta"><span>assembling SKU MN-LR-014</span><span>52%</span></div>
+        </div>
+      </article>
+
+      <!-- R6: SEO -->
+      <article class="chamber chamber--seo" data-room="seo" data-agent="Sage">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--red"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-06</span><span class="cm-status status--idle">◯ STANDBY</span></div>
+        <div class="chamber__sign"><span>SEO</span> OPTIMIZATION</div>
+        <div class="eq-screens">
+          <div class="scrn"><span style="--h:42%"></span><span style="--h:78%"></span><span style="--h:55%"></span><span style="--h:88%"></span></div>
+          <div class="scrn scrn--alt"><span style="--h:60%"></span><span style="--h:30%"></span><span style="--h:75%"></span></div>
+        </div>
+        <div class="kw-tags"><span>#witchy</span><span>#tarot</span><span>#moon</span></div>
+        <div class="char char--green" style="--cx:50%;--cy:65%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:50%;--cy:65%">SAGE</div>
+        <div class="chamber__hud">
+          <div class="ch-bar"><div class="ch-bar__fill" style="--w:12%"></div></div>
+          <div class="ch-meta"><span>awaiting payload from R-04</span><span>standby</span></div>
+        </div>
+      </article>
+
+      <!-- R7: QA SCAN -->
+      <article class="chamber chamber--qa" data-room="qa" data-agent="Lumen">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--yellow"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-07</span><span class="cm-status status--scan">◐ SCANNING</span></div>
+        <div class="chamber__sign"><span>QA</span> SCAN</div>
+        <div class="eq-gantry">
+          <div class="gantry-arm"></div><div class="gantry-laser"></div>
+          <div class="gantry-table"><div class="gantry-target"></div></div>
+        </div>
+        <div class="char char--cyan" style="--cx:30%;--cy:62%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:30%;--cy:62%">LUMEN</div>
+        <div class="chamber__hud warn">
+          <div class="ch-bar"><div class="ch-bar__fill warn" style="--w:48%"></div></div>
+          <div class="ch-meta"><span>⚠ flagging blurry mockup</span><span>48%</span></div>
+        </div>
+      </article>
+
+      <!-- R8: PUBLISH -->
+      <article class="chamber chamber--publish" data-room="publish" data-agent="Atlas">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--hex2"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-08</span><span class="cm-status status--ship">↑ DEPLOYING</span></div>
+        <div class="chamber__sign"><span>PUBLISH</span> / DEPLOY</div>
+        <div class="eq-launch">
+          <div class="launch-pad"></div>
+          <div class="launch-rocket">
+            <div class="rocket-fin l"></div><div class="rocket-fin r"></div>
+            <div class="rocket-body"></div><div class="rocket-tip"></div><div class="rocket-window"></div>
+          </div>
+          <div class="launch-fire"></div><div class="launch-smoke"></div>
+        </div>
+        <div class="char char--orange" style="--cx:25%;--cy:65%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:25%;--cy:65%">ATLAS</div>
+        <div class="chamber__hud ok">
+          <div class="ch-bar"><div class="ch-bar__fill ok" style="--w:91%"></div></div>
+          <div class="ch-meta"><span>pushing "Velvet Tarot Deck"</span><span>91%</span></div>
+        </div>
+      </article>
+
+      <!-- R9: CUSTOMER MESSAGES -->
+      <article class="chamber chamber--msg" data-room="msg" data-agent="Echo">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--violet"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-09</span><span class="cm-status status--working">● WORKING</span></div>
+        <div class="chamber__sign"><span>CUSTOMER</span> COMMS</div>
+        <div class="eq-comm">
+          <div class="comm-screen comm-screen--1"></div>
+          <div class="comm-screen comm-screen--2"></div>
+          <div class="comm-wave"></div>
+          <div class="comm-msg">3 new</div>
+        </div>
+        <div class="char char--green" style="--cx:60%;--cy:62%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+        <div class="char-name" style="--cx:60%;--cy:62%">ECHO</div>
+        <div class="chamber__hud">
+          <div class="ch-bar"><div class="ch-bar__fill" style="--w:67%"></div></div>
+          <div class="ch-meta"><span>3 tickets • 1 refund pending</span><span>67%</span></div>
+        </div>
+      </article>
+
+      <!-- R10: SALES ANALYTICS -->
+      <article class="chamber chamber--sales" data-room="sales" data-agent="Oracle">
+        <div class="chamber__bg"></div>
+        <div class="chamber__floor floor--analytics"></div>
+        <div class="chamber__chrome"><span class="cm-code">R-10 // PRIMARY</span><span class="cm-status status--working">● STREAMING</span></div>
+        <div class="chamber__sign sales-sign"><span>SALES /</span> ANALYTICS</div>
+        <div class="sales-deck">
+          <div class="sales-metrics">
+            <div class="metric"><div class="metric__label">REV / 24H</div><div class="metric__value">$<span id="metric-rev24">184.40</span></div><div class="metric__meta up">▲ 12.4%</div></div>
+            <div class="metric"><div class="metric__label">CONVERSION</div><div class="metric__value"><span id="metric-conv">3.8</span>%</div><div class="metric__meta up">▲ 0.6%</div></div>
+            <div class="metric"><div class="metric__label">AOV</div><div class="metric__value">$<span id="metric-aov">28.40</span></div><div class="metric__meta down">▼ $0.20</div></div>
+            <div class="metric"><div class="metric__label">SESSIONS</div><div class="metric__value"><span id="metric-sessions">1,284</span></div><div class="metric__meta up">▲ 89</div></div>
+          </div>
+          <div class="sales-chart">
+            <svg viewBox="0 0 400 90" preserveAspectRatio="none">
+              <defs><linearGradient id="salesgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff9b3d" stop-opacity="0.55"/><stop offset="100%" stop-color="#ff9b3d" stop-opacity="0"/></linearGradient></defs>
+              <path id="sales-area" d="" fill="url(#salesgrad)"/>
+              <path id="sales-line" d="" fill="none" stroke="#ff9b3d" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="char char--amber" style="--cx:84%;--cy:60%"><div class="char__shadow"></div><div class="char__body"></div><div class="char__head"></div><div class="char__visor"></div></div>
+          <div class="char-name" style="--cx:84%;--cy:60%">ORACLE</div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Mission burst overlay -->
+    <div class="mission-burst" id="mission-burst" aria-hidden="true">
+      <div class="burst-ring"></div><div class="burst-ring r2"></div><div class="burst-ring r3"></div>
+      <div class="burst-card">
+        <div class="burst-card__sup">// TRANSMISSION COMPLETE</div>
+        <div class="burst-card__main">PRODUCT DEPLOYED</div>
+        <div class="burst-card__sub" id="burst-name">VELVET TAROT DECK</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT: ETSY OPS -->
+  <aside class="ops-panel">
+    <div class="panel panel--corners">
+      <div class="ops-head">
+        <div class="ops-head__icon">⌬</div>
+        <div class="ops-head__title">FACTORY 1 — ETSY OPERATIONS</div>
+      </div>
+      <div class="ops-pills">
+        <span class="op-pill ok"><span class="dot green pulse"></span>PRINTIFY CONNECTED</span>
+        <span class="op-pill amber"><span class="dot amber pulse"></span>ETSY LIVE</span>
+      </div>
+      <div class="ops-quick">
+        <div class="oq"><div class="oq__v green">$<span id="oq-rev">1,988.72</span></div><div class="oq__l">REVENUE</div></div>
+        <div class="oq"><div class="oq__v cyan">10</div><div class="oq__l">LIVE ON ETSY</div></div>
+        <div class="oq"><div class="oq__v amber">2</div><div class="oq__l">PUBLISHING</div></div>
+      </div>
+      <div class="ops-tabs">
+        <button class="op-tab active">▮ Products</button>
+        <button class="op-tab"><span class="dot green pulse"></span>Live Feed</button>
+        <button class="op-tab">▤ Catalog</button>
+        <button class="op-tab">▥ Analytics</button>
+      </div>
+    </div>
+
+    <div class="panel panel--corners">
+      <div class="panel__head"><span class="panel__title">PRODUCT PIPELINE</span><span class="panel__tag amber">(12)</span></div>
+      <div class="pp-stages">
+        <div class="pp-stage"><div class="pp-ring"><span class="pp-num">3</span></div><div class="pp-label">RESEARCH</div><div class="pp-line"></div></div>
+        <div class="pp-stage"><div class="pp-ring"><span class="pp-num">5</span></div><div class="pp-label">DESIGN</div><div class="pp-line"></div></div>
+        <div class="pp-stage active"><div class="pp-ring active"><span class="pp-num">11</span></div><div class="pp-label">MOCKUP</div><div class="pp-line"></div></div>
+        <div class="pp-stage"><div class="pp-ring"><span class="pp-num">2</span></div><div class="pp-label">LISTING</div></div>
+      </div>
+    </div>
+
+    <div class="panel panel--corners panel--activity">
+      <div class="panel__head"><span class="panel__title">RECENT ACTIVITY</span><span class="panel__tag live">● LIVE</span></div>
+      <ul class="activity">
+        <li><span class="ac-bullet amber"></span><b>"Cyberpunk Cat Tee"</b><span class="ac-arrow">→</span><span class="ac-tag listing">Listing</span></li>
+        <li><span class="ac-bullet cyan"></span><b>"Minimalist Design"</b><span class="ac-arrow">→</span><span class="ac-tag mockup">Mockup</span></li>
+        <li><span class="ac-bullet pink"></span><b>"Crypto / Web3 Art"</b><span class="ac-arrow">→</span><span class="ac-tag mockup">Mockup</span></li>
+        <li><span class="ac-bullet green"></span><b>"Self-Improvement"</b><span class="ac-arrow">→</span><span class="ac-tag mockup">Mockup</span></li>
+        <li><span class="ac-bullet violet"></span><b>"Lo-Fi / Chill Music"</b><span class="ac-arrow">→</span><span class="ac-tag mockup">Mockup</span></li>
+      </ul>
+    </div>
+
+    <div class="panel panel--corners panel--mockup-feature">
+      <div class="panel__head"><span class="panel__title">MOCKUP <span class="dim">(11)</span></span><span class="panel__tag amber">DRAFT</span></div>
+      <div class="mockup-card">
+        <div class="mockup-card__thumb"><div class="thumb-tee"><span class="tee-art">AI</span></div></div>
+        <div class="mockup-card__body">
+          <div class="mockup-card__title">AI Oversized Hoodie</div>
+          <div class="mockup-card__meta">Printify proof • 14:22:08</div>
+          <div class="mockup-card__row">
+            <span class="mc-pill cyan">cyberpunk</span>
+            <span class="mc-pill pink">streetwear</span>
+            <span class="mc-pill amber">3xl</span>
+          </div>
+          <div class="mockup-card__actions">
+            <button class="mca">APPROVE</button>
+            <button class="mca">REGEN</button>
+            <button class="mca primary">PUBLISH</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel--corners panel--compact panel--feed">
+      <div class="panel__head"><span class="panel__title">SYSTEM FEED</span><span class="panel__tag live">● LIVE</span></div>
+      <ol class="feed" id="feed-list"></ol>
+    </div>
+  </aside>
+</main>
+
+<!-- BOTTOM HUD -->
+<footer class="hud-bottom">
+  <div class="prod-stats">
+    <div class="ps-pill ok"><div class="ps-pill__label">PASS</div><div class="ps-pill__val"><span id="ps-pass">80</span>%</div></div>
+    <div class="ps-pill"><div class="ps-pill__label">OUTPUT</div><div class="ps-pill__val"><span id="ps-output">538</span></div></div>
+    <div class="ps-pill amber"><div class="ps-pill__label">SHIPPED</div><div class="ps-pill__val"><span id="ps-shipped">536</span></div></div>
+    <div class="ps-pill cyan"><div class="ps-pill__label">SENT</div><div class="ps-pill__val"><span id="ps-sent">482</span></div></div>
+    <div class="ps-pill pink"><div class="ps-pill__label">QUEUE</div><div class="ps-pill__val"><span id="ps-queue">17</span></div></div>
+  </div>
+
+  <div class="hud-bottom__ticker">
+    <div class="ticker">
+      <div class="ticker__row">
+        <span>► ULTRONOS v9.4.2</span>
+        <span>► ATLAS deploying VTD-007 to live shelf</span>
+        <span>► PIXEL render queue draining: 9/12</span>
+        <span>► LUMEN ⚠ flagging blurry mockup • batch #67</span>
+        <span>► ECHO ticket #4419 resolved</span>
+        <span>► Revenue +$184.40 last 24h</span>
+        <span>► NOVA copy synth complete</span>
+        <span>► All systems nominal</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="bn-btn" data-nav="milestones"><div class="bn-btn__icon">★</div><div class="bn-btn__label">MILESTONES</div></button>
+    <button class="bn-btn" data-nav="timeline"><div class="bn-btn__icon">▤</div><div class="bn-btn__label">TIMELINE</div></button>
+    <button class="bn-btn" data-nav="missions"><div class="bn-btn__icon">⬢</div><div class="bn-btn__label">MISSIONS</div></button>
+    <button class="bn-btn active" data-nav="station"><div class="bn-btn__icon">⌬</div><div class="bn-btn__label">STATION</div></button>
+    <button class="bn-btn" data-nav="settings"><div class="bn-btn__icon">⚙</div><div class="bn-btn__label">SETTINGS</div></button>
+    <button class="bn-btn help" data-nav="help"><div class="bn-btn__icon">?</div><div class="bn-btn__label">HELP</div></button>
+  </nav>
+</footer>
+
+<!-- Toasts -->
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<!-- Alissa — ElevenLabs Conversational AI voice agent. Floats bottom-right. -->
+<div class="voice-shell" id="voice-shell">
+  <div class="voice-shell__chrome">
+    <span class="voice-shell__dot"></span>
+    <span class="voice-shell__label">ALISSA</span>
+    <span class="voice-shell__sub">tap to talk</span>
+  </div>
+  <elevenlabs-convai agent-id="agent_3701kbxwt990ejn9ej98tys0kah6"></elevenlabs-convai>
+</div>
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+ <script>window.__AGENT_API_BASE__ = window.location.origin;</script>
+<script src="app.js"></script>
+</body>
+</html>

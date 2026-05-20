@@ -16,6 +16,7 @@
  */
 
 import "dotenv/config";
+import path from "path";
 import express from "express";
 import cors from "cors";
 import { apiRouter } from "./api/routes";
@@ -25,10 +26,11 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
+// API mounted FIRST so /api/* takes priority over static
 app.use("/api", apiRouter);
 
-// Root sanity check
-app.get("/", (_req, res) => {
+// JSON sanity endpoint (was the root before — keep available for health checks / debugging)
+app.get("/api", (_req, res) => {
   res.json({
     ok: true,
     service: "ultronos-dashboard-api",
@@ -49,6 +51,14 @@ app.get("/", (_req, res) => {
     ],
   });
 });
+
+// Static dashboards. Works in both dev (ts-node, __dirname = src/) and prod
+// (compiled, __dirname = dist/) — both resolve to <project>/public.
+const PUBLIC_DIR = path.join(__dirname, "..", "public");
+app.use("/v1", express.static(path.join(PUBLIC_DIR, "v1")));
+app.use("/v2", express.static(path.join(PUBLIC_DIR, "v2")));
+// Root: serves public/index.html (landing page with links to /v1 and /v2)
+app.use(express.static(PUBLIC_DIR));
 
 const port = Number(process.env.PORT) || 3000;
 app.listen(port, () => {
