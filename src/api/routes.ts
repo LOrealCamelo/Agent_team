@@ -7,8 +7,32 @@
 import { Router, type Request, type Response } from "express";
 import { store } from "./state";
 import { runResearchAgent } from "./research";
+import { getMissions } from "./missions";
+import { getKpis } from "./kpis";
 
 export const apiRouter = Router();
+
+// ---------- Missions (real Sheet-backed) ----------
+apiRouter.get("/missions", async (_req, res) => {
+  try {
+    const missions = await getMissions();
+    res.json({ missions, sourceTimestamp: new Date().toISOString() });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    res.status(502).json({ ok: false, error: "Sheet read failed: " + msg, missions: [] });
+  }
+});
+
+// ---------- KPIs (real Sheet-backed + live agent counts) ----------
+apiRouter.get("/kpis", async (_req, res) => {
+  try {
+    const kpis = await getKpis();
+    res.json(kpis);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    res.status(502).json({ ok: false, error: "KPI compute failed: " + msg });
+  }
+});
 
 // ---------- Health ----------
 apiRouter.get("/health", (_req, res) => {

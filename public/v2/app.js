@@ -694,9 +694,11 @@
   $('drawer-close')?.addEventListener('click', closeDrawer);
   backdrop?.addEventListener('click', closeDrawer);
 
-  document.querySelectorAll('.chamber').forEach(ch => {
-    ch.addEventListener('click', () => openDrawer(ch.dataset.room));
-  });
+  // Chamber click → drawer is intentionally disabled. The drawer pop-out
+  // was distracting; chambers are display-only. Re-enable by uncommenting.
+  // document.querySelectorAll('.chamber').forEach(ch => {
+  //   ch.addEventListener('click', () => openDrawer(ch.dataset.room));
+  // });
 
   // Wire drawer's START / PAUSE / RESTART buttons to current drawer agent
   const drawerActions = document.querySelectorAll('.drawer__actions button');
@@ -848,6 +850,58 @@
     }
   }
 
+  // ---------- Real KPIs from Sheet (Revenue tab + live agent counts) ----------
+  async function pollKpis() {
+    try {
+      const k = await apiGet('/kpis');
+      if (typeof k.revenue === 'number') setText('stat-revenue', fmtMoney(k.revenue));
+      if (typeof k.orders === 'number')  setText('stat-orders', fmtInt(k.orders));
+      if (typeof k.workflowsRunning === 'number') setText('stat-flows', k.workflowsRunning);
+      if (typeof k.agentsActive === 'number') setText('stat-agents-active', k.agentsActive);
+      if (typeof k.systemHealthPct === 'number') setText('stat-health', k.systemHealthPct.toFixed(1));
+      // Health label pill (Excellent/Good/Degraded)
+      const healthDelta = document.querySelector('.stat-card .stat-card__delta.good');
+      if (healthDelta && k.systemHealthLabel) healthDelta.textContent = k.systemHealthLabel;
+    } catch (err) {
+      // Sheet unreachable — leave existing numbers in place rather than zeroing the UI
+    }
+  }
+
+  // ---------- Real Missions from Sheet (Projects tab) ----------
+  async function pollMissions() {
+    try {
+      const data = await apiGet('/missions');
+      if (!Array.isArray(data.missions)) return;
+      const ms = data.missions.slice(0, 4); // panel shows up to 4
+      const els = document.querySelectorAll('.mission-list .mission');
+      els.forEach((el, i) => {
+        const m = ms[i];
+        if (!m) { el.style.display = 'none'; return; }
+        el.style.display = '';
+        el.dataset.mission = m.id;
+        const titleEl = el.querySelector('.mission__title');
+        const rewardEl = el.querySelector('.mission__reward');
+        const pctEl = el.querySelector('.mission__pct');
+        const fillEl = el.querySelector('.mission__fill');
+        if (titleEl) titleEl.textContent = m.title;
+        if (rewardEl) {
+          const reward = m.revenueGoal ? `$${m.revenueGoal.toLocaleString()}` : m.priority;
+          rewardEl.textContent = m.deadline ? `${reward} · ${m.deadline}` : reward;
+        }
+        if (pctEl) pctEl.textContent = Math.floor(m.progress) + '%';
+        if (fillEl) fillEl.style.setProperty('--w', Math.floor(m.progress) + '%');
+      });
+      // Count pill: "N OPEN"
+      const countPill = document.querySelector('.glass-panel .muted-pill');
+      if (countPill && /OPEN/i.test(countPill.textContent || '')) {
+        const open = ms.filter(m => m.progress < 100).length;
+        countPill.textContent = `${open} OPEN`;
+      }
+    } catch (err) {
+      // ignore — keep last-known mission UI
+    }
+  }
+
   // ---------- Override controls to route through API when connected ----------
   const origStartAll = startAllAgents;
   const origPauseAll = pauseAllAgents;
@@ -881,8 +935,8 @@
     if (apiMode) {
       try {
         const data = await apiPost(`/agents/${id}/start`);
-        // Phase 3: Research Agent returns generated ideas
-        if (id === 'research' && Array.isArray(data.result)) {
+        // Researcher returns generated ideas from the live Anthropic call
+        if (id === 'researcher' && Array.isArray(data.result)) {
           researchResult = data.result;
           toast('ok', 'RESEARCH', `Generated ${data.result.length} ideas`);
           paintDrawerIfOpen(); // re-paint to show ideas
@@ -937,11 +991,11 @@
     }
   }
 
-  // Extend drawer painter to show Research Agent's generated ideas
+  // Extend drawer painter to show Researcher's generated ideas
   const origPaintDrawer = paintDrawerIfOpen;
   paintDrawerIfOpen = function() {
     origPaintDrawer();
-    if (!drawerAgent || drawerAgent.id !== 'research') return;
+    if (!drawerAgent || drawerAgent.id !== 'researcher') return;
     const body = document.querySelector('.drawer__body');
     if (!body) return;
     let panel = document.getElementById('research-ideas');
@@ -988,11 +1042,14 @@
     if (ok) {
       apiMode = true;
       setApiPill('connected');
-      toast('ok', 'API', 'Connected to ' + API_BASE);
       setInterval(pollApi, 1500);
       pollApi();
+      // Real Sheet-backed data (Revenue + Projects)
+      pollKpis(); pollMissions();
+      setInterval(pollKpis, 10_000);     // KPI bar refreshes every 10s
+      setInterval(pollMissions, 30_000); // Missions panel refreshes every 30s
     } else {
-      toast('info', 'API', 'Offline — using local mock');
+      toast('info', 'API', 'Offline — local mock active');
     }
   });
 
