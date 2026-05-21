@@ -120,9 +120,8 @@
       const sp = parseFloat(btn.dataset.speed);
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      if (sp === 0) { state.paused = true; toast('warn', 'PAUSED', 'Simulation halted'); return; }
+      if (sp === 0) { state.paused = true; return; }
       state.paused = false; state.speed = sp;
-      toast('info', 'SPEED', `@ ${sp}×`);
     });
   });
 
@@ -138,19 +137,19 @@
   }
   document.querySelectorAll('.chamber').forEach(ch => {
     ch.addEventListener('mouseenter', () => updatePopup(ch.dataset.room));
-    ch.addEventListener('click', () => toast('info', 'AGENT', AGENTS[ch.dataset.room]?.name || ''));
+    // Chamber click — silent. (Was firing 'AGENT: name' toast on every click.)
   });
   document.querySelectorAll('.bn-btn').forEach(b => {
     b.addEventListener('click', () => {
       document.querySelectorAll('.bn-btn').forEach(x => x.classList.remove('active'));
       b.classList.add('active');
-      toast('info', b.dataset.nav.toUpperCase(), `${b.dataset.nav} view`);
+      // Nav button click — silent (was firing toast on every tab click)
     });
   });
   document.querySelectorAll('.mission').forEach(m => {
     m.addEventListener('click', () => {
       const title = m.querySelector('.mission__title')?.textContent || '';
-      toast('info', 'MISSION', title);
+      // Mission click — silent (was firing toast on every mission click)
     });
   });
 
@@ -276,7 +275,7 @@
       catch (e) { toast('warn','API',e.message); }
     } else {
       // Local fallback: nothing required, the existing local tick keeps running
-      toast('info','LOCAL','All agents running locally');
+      // Silent local-fallback start
     }
   }
   async function pauseAllAgentsRouted() {
@@ -284,7 +283,7 @@
       try { await apiPost('/agents/pause'); toast('warn','API','All agents paused'); await pollApi(); return; }
       catch (e) { toast('warn','API',e.message); }
     } else {
-      toast('warn','LOCAL','Local sim only — restart page to reset');
+      // Silent local-fallback reset
     }
   }
   async function resetAllAgentsRouted() {
@@ -302,7 +301,7 @@
           toast('ok','ASTRA',`Generated ${data.result.length} Etsy ideas`);
           renderAstraIdeas();
         } else {
-          toast('info','API',`Started: ${id}`);
+          // Silent per-agent start confirmation (was creating noise on every chamber start)
         }
         await pollApi();
       } catch (e) { toast('warn','API',`${id}: ${e.message}`); }
@@ -420,11 +419,11 @@
     if (ok) {
       apiMode = true;
       setApiPill('connected');
-      toast('ok','API','Connected to ' + API_BASE);
+      // Silent API connect
       setInterval(pollApi, 1500);
       pollApi();
     } else {
-      toast('info','API','Offline — using local sim');
+      // Silent offline notice
     }
   });
 

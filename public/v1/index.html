@@ -11,6 +11,20 @@
 </head>
 <body>
 
+<!-- SVG filter defs for liquid-glass refraction (Chromium). Referenced
+     by .panel / .glass-card via backdrop-filter: url(#v1-glass). Degrades
+     to plain blur in Safari/Firefox. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="v1-glass" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012"
+                    numOctaves="2" seed="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6"
+                         xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
 <!-- Atmospheric overlays -->
 <div class="stars" aria-hidden="true"></div>
 <div class="nebula" aria-hidden="true"></div>
@@ -32,7 +46,7 @@
         <polygon points="20,8 32,15 32,25 20,32 8,25 8,15" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>
         <circle cx="20" cy="20" r="3" fill="currentColor"/>
       </svg>
-      <div class="brand__text">ULTRONOS<span class="dim">08</span></div>
+      <div class="brand__text">Expert AI Solutions</div>
     </div>
     <div class="hud-pill"><span class="dot green"></span>FACTORY DECK</div>
     <div class="hud-pill ghost"><span class="dot green pulse"></span>STATION ONLINE</div>
