@@ -18,8 +18,8 @@ export interface ProductIdea {
   estimated_price_range: string;
 }
 
-// Astra is the trend/research agent in the ULTRONOS roster (chamber id="trend")
-const RESEARCH_AGENT_ID = "trend";
+// Researcher is the real trend/research agent (chamber id="researcher")
+const RESEARCH_AGENT_ID = "researcher";
 
 const SYSTEM_PROMPT = `You are the Research Agent for an autonomous Etsy storefront.
 Your specialty: generating digital product ideas (printables, planners, journals,

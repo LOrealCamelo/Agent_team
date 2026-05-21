@@ -12,161 +12,181 @@
 
   const STATUSES = ['idle', 'thinking', 'working', 'waiting', 'complete', 'error'];
 
-  /** @type {Array<{id:string, name:string, role:string, color:string, tasks:string[]}>} */
+  /**
+   * NeuroSpicy Mystic — 10 real agents per Master Spec + Training Manual.
+   * `built` = real worker-side agent exists (PM/Scribe/Researcher today).
+   * Visual `stage` reuses existing chamber__stage--* CSS classes.
+   * @type {Array<{id:string, name:string, role:string, color:string, built:boolean, stage:string, tasks:string[]}>}
+   */
   const AGENT_DEFS = [
     {
-      id: 'research',
-      name: 'Research Agent',
-      role: 'Scanning sources & gathering context',
-      color: 'cyan',
+      id: 'pm',
+      name: 'PM',
+      role: 'Master Strategist — daily Top-3 MITs',
+      color: 'purple', built: true, stage: 'plan',
       tasks: [
-        'Indexing 142 docs from arxiv',
-        'Cross-referencing GitHub repos',
-        'Pulling release notes from upstream',
-        'Summarizing competitor changelog',
-        'Building knowledge graph for billing module',
-        'Scraping recent RFCs',
-        'Aggregating user research transcripts'
+        'Triage brain dump → Top 3 MITs',
+        'Building dependency map for May Kit',
+        'Eisenhower-sorting 14 backlog items',
+        'Drafting 8am MIT message',
+        'Auditing burndown for Week 4'
       ]
     },
     {
-      id: 'plan',
-      name: 'Planning Agent',
-      role: 'Architecting solutions & breaking down work',
-      color: 'purple',
+      id: 'scribe',
+      name: 'Scribe',
+      role: 'DM Drafter — IG/TikTok replies in your voice',
+      color: 'purple', built: true, stage: 'chatbot',
       tasks: [
-        'Drafting architecture for billing module',
-        'Breaking down "voice agent v2" into 14 tickets',
-        'Sequencing CI/CD pipeline refactor',
-        'Estimating effort for auth-rewrite',
-        'Mapping dependencies for /api/v2',
-        'Specifying rate-limiter contract'
+        'Drafting 5 IG DM replies',
+        'Flagging urgent: collab >10k followers',
+        'Auto-sending Cheat Code on "spell" trigger',
+        'Telegram approve-queue ready',
+        'Drafting TikTok comment thread responses'
       ]
     },
     {
-      id: 'code',
-      name: 'Code Agent',
-      role: 'Writing & refactoring code',
-      color: 'gold',
+      id: 'researcher',
+      name: 'Researcher',
+      role: 'Trend Hunter — daily 8am topics + hooks',
+      color: 'cyan', built: true, stage: 'research',
       tasks: [
-        'Implementing /api/v2/users endpoint',
-        'Refactoring session store to Redis',
-        'Adding pagination to /orders',
-        'Migrating webhook handlers to v2 schema',
-        'Patching CSRF guard in auth middleware',
-        'Drafting telemetry adapter',
-        'Cleaning up legacy /api/v1 callers'
+        "Pulling top 10 TikTok 'witchy' trends",
+        "Indexing Etsy 'ADHD planner' searches",
+        'Cited stat: ADHD diagnosis rates',
+        "Alert: 'mercury retrograde' trending +340%",
+        "Compiling 3 hooks for tonight's Live"
       ]
     },
     {
-      id: 'test',
-      name: 'Test Agent',
-      role: 'Running & writing test suites',
-      color: 'purple',
+      id: 'content',
+      name: 'Content',
+      role: 'Content Creator — scripts, carousels, emails',
+      color: 'gold', built: false, stage: 'code',
       tasks: [
-        'Executing jest suite for auth module',
-        'Running playwright e2e on checkout flow',
-        'Writing fuzz tests for /api/v2/users',
-        'Caught regression in /api/v2/users → ticket #2148',
-        'Validating retry logic in webhook worker',
-        'Replaying production traffic against canary'
+        'Generating TikTok script: Rose Petal Wax',
+        'Building IG carousel 10/10 slides',
+        "Drafting email: 'Cheat Code drops Friday'",
+        'Pulling brand photos from URL list',
+        'Composing Canva mockup via API'
       ]
     },
     {
-      id: 'qa',
-      name: 'QA Agent',
-      role: 'Reviewing PRs & validating quality',
-      color: 'cyan',
+      id: 'poster',
+      name: 'Poster',
+      role: 'Publish Schedule — Make.com → IG/TikTok/FB',
+      color: 'gold', built: false, stage: 'deploy',
       tasks: [
-        'Reviewing PR #2148 — 8/12 checks passed',
-        'Auditing accessibility on /settings',
-        'Verifying spec compliance for /api/v2/orders',
-        'Scanning bundle for security advisories',
-        'Diffing release-notes against shipped commits',
-        'Approving billing-v2 milestone'
+        'Scheduling 7pm EST post → IG',
+        'Pushing carousel to TikTok with UTM',
+        'Cross-posting to FB business page',
+        'Confirming Make.com webhook',
+        'Replying "Posted" to PM channel'
       ]
     },
     {
-      id: 'deploy',
-      name: 'Deploy Agent',
-      role: 'Deploying releases to production',
-      color: 'gold',
+      id: 'product',
+      name: 'Product',
+      role: 'Listing Manager — Etsy / Stan / TikTok Shop',
+      color: 'purple', built: false, stage: 'test',
       tasks: [
-        'Rolling out api/v2 to canary (5%)',
-        'Promoting auth-rewrite to staging',
-        'Deploying billing module to prod',
-        'Cutting hotfix v9.4.3',
-        'Rotating session-store credentials',
-        'Tagging release v9.5.0 and publishing'
+        'Listing Sticker Vault 500-pack on Etsy',
+        'Building TikTok Shop 50-pack variant',
+        'Generating 3 mockups via Canva API',
+        'Wiring Stan digital-product automation',
+        'Pricing audit: $9 vs $19 Digital tier'
       ]
     },
     {
-      id: 'voice',
-      name: 'Voice Agent',
-      role: 'Listening & responding on phone channels',
-      color: 'cyan',
+      id: 'marketing',
+      name: 'Marketing',
+      role: 'Ads Council — $20/day Meta, ROAS, kill/scale',
+      color: 'cyan', built: false, stage: 'qa',
       tasks: [
-        'Handling inbound call from +1-555-0142',
-        'Transcribing voicemail backlog (12 msgs)',
-        'Routing escalation to support tier-2',
-        'Calibrating ASR model on recent calls',
-        'Logging sentiment for QA review'
+        'Running Council on $20/day spend',
+        'ROAS report: Cheat Code freebie funnel',
+        'Kill/scale call: May Kit ad creative #3',
+        'Drafting FB ad copy: tarot + ADHD interest',
+        'Building funnel: Freebie → Vault → Kit'
       ]
     },
     {
-      id: 'chatbot',
-      name: 'Chatbot Agent',
-      role: 'Conversational AI on web & messaging',
-      color: 'purple',
+      id: 'sales',
+      name: 'Sales',
+      role: 'Revenue Recovery — Stripe carts, Klaviyo upsells',
+      color: 'cyan', built: false, stage: 'analytics',
       tasks: [
-        'Resolving conversation #4419',
-        'Handling 3 active web-chat sessions',
-        'Suggesting refund for ticket #4421',
-        'Updating intent classifier with new examples',
-        'Drafting reply for slack thread'
+        'Stripe webhook: cart abandoned 1hr ago',
+        'Klaviyo: drafting 48hr Vault upsell',
+        'Weekly revenue by product report',
+        'Case study email: "3 deposits proof"',
+        'Computing 7-day revenue delta'
       ]
     },
     {
-      id: 'analytics',
-      name: 'Analytics Agent',
-      role: 'Insights, reports & monitoring',
-      color: 'cyan',
+      id: 'djinn',
+      name: 'Djinn',
+      role: 'Inbound Voice — Vapi + ElevenLabs phone agent',
+      color: 'cyan', built: false, stage: 'voice',
       tasks: [
-        'Generating weekly performance report',
-        'Building cohort retention chart',
-        'Computing conversion funnel for Q2',
-        'Flagging anomaly in checkout drop-off',
-        'Aggregating MoM revenue deltas'
+        'Answering inbound: refund request <$27',
+        'Booking tarot reading via Calendly API',
+        'Sending Cheat Code link to caller',
+        "FAQ: 'where's my sticker download'",
+        "Escalating medical question to you"
+      ]
+    },
+    {
+      id: 'outbound',
+      name: 'Outbound',
+      role: 'Outbound Voice — 30-day check-ins, Kit offer',
+      color: 'gold', built: false, stage: 'voice',
+      tasks: [
+        'Calling buyer 30 days post-Vault',
+        'May Kit $27 offer to past customer',
+        "Logging testimonial: 'rose petal worked'",
+        'Troubleshoot: PDF not downloading',
+        'Daily quota: 14 of 50 calls placed'
       ]
     }
   ];
 
-  /** Mission definitions (UI on right rail). Progress is derived from agent completions. */
+  /**
+   * Active missions = L'Oreal's real 5 active projects.
+   * Each driven by completions from the agent(s) responsible.
+   */
   const MISSIONS = [
     {
-      id: 'code-review',
-      title: 'Automate Code Review',
-      reward: '$2,000 Reward',
-      // QA Agent completions feed this
-      drivers: ['qa'],
-      perCompletion: 7,
-      progress: 75 // starting value, matches HTML
-    },
-    {
-      id: 'chat-assistant',
-      title: 'Build AI Chat Assistant',
-      reward: '$1,500 Reward',
-      drivers: ['code', 'chatbot'],
+      id: 'cheat-code',
+      title: 'Cheat Code PDF',
+      reward: '$2,910 launch',
+      drivers: ['content', 'product'],
       perCompletion: 5,
-      progress: 60
+      progress: 95
     },
     {
-      id: 'cicd',
-      title: 'Optimize CI/CD Pipeline',
-      reward: '$2,500 Reward',
-      drivers: ['test', 'deploy'],
+      id: 'sticker-vault',
+      title: 'Sticker Vault 500',
+      reward: '$5,400 TikTok Shop',
+      drivers: ['product'],
+      perCompletion: 4,
+      progress: 0
+    },
+    {
+      id: 'audiobook',
+      title: 'Before They Burned Us',
+      reward: '$5,000 audiobook',
+      drivers: ['scribe', 'content'],
       perCompletion: 6,
-      progress: 40
+      progress: 10
+    },
+    {
+      id: 'may-kit',
+      title: 'May Nervous System Kit',
+      reward: '$2,700 Apr 25',
+      drivers: ['marketing', 'product'],
+      perCompletion: 5,
+      progress: 0
     }
   ];
 

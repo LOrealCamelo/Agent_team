@@ -62,21 +62,21 @@ apiRouter.post("/agents/:id/start", async (req: Request, res: Response) => {
   const a = store.get(req.params.id);
   if (!a) { res.status(404).json({ ok: false, error: "agent not found" }); return; }
 
-  // Phase 3: Astra (trend) calls real AI for Etsy product ideation.
-  if (a.id === "trend") {
-    store.start("trend");
+  // Researcher calls real AI for trend/idea generation (Etsy + TikTok content).
+  if (a.id === "researcher") {
+    store.start("researcher");
     try {
       const ideas = await runResearchAgent();
-      res.json({ ok: true, agent: store.get("trend"), result: ideas });
+      res.json({ ok: true, agent: store.get("researcher"), result: ideas });
       return;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      res.status(500).json({ ok: false, error: msg, agent: store.get("trend") });
+      res.status(500).json({ ok: false, error: msg, agent: store.get("researcher") });
       return;
     }
   }
 
-  // All other agents: mock-only — just flip active=true.
+  // Other agents: simulator-driven (until cross-process Postgres bridge).
   store.start(req.params.id);
   res.json({ ok: true, agent: store.get(req.params.id) });
 });

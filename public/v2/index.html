@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AI Agent Operations Hub · Claude Code Command Center</title>
+<title>ULTRONOS · NeuroSpicy Mystic Agent Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -52,8 +52,8 @@
 <!-- ============================ TOP HUD ============================ -->
 <header class="hud-top">
   <div class="hud-top__title">
-    <h1 class="brand-title">AI AGENT OPERATIONS HUB</h1>
-    <p class="brand-subtitle">Claude Code AI Command Center</p>
+    <h1 class="brand-title">ULTRONOS // NEUROSPICY MYSTIC</h1>
+    <p class="brand-subtitle">L'Oreal's Agent Command Center · 47620</p>
   </div>
 
   <nav class="hud-top__stats" aria-label="Live operations metrics">
@@ -289,18 +289,75 @@
       </g>
     </svg>
 
-    <!-- 3×3 Chamber grid -->
+    <!-- 5×2 Chamber grid — NeuroSpicy Mystic 10-agent roster -->
     <div class="chamber-grid">
 
-      <!-- 01 RESEARCH -->
-      <article class="chamber" data-room="research" data-agent="Research">
-        <div class="chamber__rim"></div>
+      <!-- 01 PM (real · purple · blueprint stage) -->
+      <article class="chamber" data-room="pm" data-agent="PM">
+        <div class="chamber__rim purple"></div>
         <div class="chamber__inner">
           <div class="chamber__head">
             <span class="chamber__num">01</span>
-            <span class="chamber__name">RESEARCH</span>
+            <span class="chamber__name">PM</span>
           </div>
-          <div class="chamber__task">Scanning sources...</div>
+          <div class="chamber__task">Triaging today's MITs…</div>
+          <div class="chamber__stage chamber__stage--plan">
+            <div class="blueprint">
+              <div class="bp-cell active"></div><div class="bp-cell"></div><div class="bp-cell"></div>
+              <div class="bp-cell"></div><div class="bp-cell active"></div><div class="bp-cell"></div>
+              <div class="bp-cell"></div><div class="bp-cell"></div><div class="bp-cell active"></div>
+            </div>
+            <div class="bot bot--purple">
+              <svg viewBox="0 0 40 50">
+                <rect x="8" y="14" width="24" height="22" rx="4" fill="#251a3e" stroke="currentColor" stroke-width="1.2"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
+                <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
+                <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
+                <rect x="6" y="36" width="28" height="6" rx="2" fill="#1a0f30" stroke="currentColor" stroke-width="1"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 02 SCRIBE (real · purple · chatbox stage) -->
+      <article class="chamber" data-room="scribe" data-agent="Scribe">
+        <div class="chamber__rim purple"></div>
+        <div class="chamber__inner">
+          <div class="chamber__head">
+            <span class="chamber__num">02</span>
+            <span class="chamber__name">SCRIBE</span>
+          </div>
+          <div class="chamber__task">Drafting DM replies…</div>
+          <div class="chamber__stage chamber__stage--chatbot">
+            <div class="chatbox">
+              <div class="cb-bubble user">need help with my order</div>
+              <div class="cb-bubble bot"><span class="cb-dots"><i></i><i></i><i></i></span></div>
+            </div>
+            <div class="bot bot--purple">
+              <svg viewBox="0 0 40 50">
+                <rect x="8" y="14" width="24" height="22" rx="4" fill="#251a3e" stroke="currentColor" stroke-width="1.2"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
+                <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
+                <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
+                <rect x="6" y="36" width="28" height="6" rx="2" fill="#1a0f30" stroke="currentColor" stroke-width="1"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 03 RESEARCHER (real · cyan · research dome) -->
+      <article class="chamber" data-room="researcher" data-agent="Researcher">
+        <div class="chamber__rim"></div>
+        <div class="chamber__inner">
+          <div class="chamber__head">
+            <span class="chamber__num">03</span>
+            <span class="chamber__name">RESEARCHER</span>
+          </div>
+          <div class="chamber__task">Pulling today's trends…</div>
           <div class="chamber__stage chamber__stage--research">
             <div class="r-dome">
               <div class="r-dome__rings"><span></span><span></span><span></span></div>
@@ -310,8 +367,7 @@
             <div class="bot bot--cyan">
               <svg viewBox="0 0 40 50">
                 <rect x="8" y="14" width="24" height="22" rx="4" fill="#1a2540" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="15" cy="24" r="2.2" fill="currentColor"/>
-                <circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
                 <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
                 <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
                 <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
@@ -322,58 +378,27 @@
         </div>
       </article>
 
-      <!-- 02 PLAN -->
-      <article class="chamber" data-room="plan" data-agent="Plan">
-        <div class="chamber__rim purple"></div>
-        <div class="chamber__inner">
-          <div class="chamber__head">
-            <span class="chamber__num">02</span>
-            <span class="chamber__name">PLAN</span>
-          </div>
-          <div class="chamber__task">Architecting solution...</div>
-          <div class="chamber__stage chamber__stage--plan">
-            <div class="blueprint">
-              <div class="bp-cell"></div><div class="bp-cell active"></div><div class="bp-cell"></div>
-              <div class="bp-cell"></div><div class="bp-cell active"></div><div class="bp-cell"></div>
-              <div class="bp-cell active"></div><div class="bp-cell"></div><div class="bp-cell"></div>
-            </div>
-            <div class="bot bot--purple">
-              <svg viewBox="0 0 40 50">
-                <rect x="8" y="14" width="24" height="22" rx="4" fill="#251a3e" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="15" cy="24" r="2.2" fill="currentColor"/>
-                <circle cx="25" cy="24" r="2.2" fill="currentColor"/>
-                <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
-                <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
-                <rect x="6" y="36" width="28" height="6" rx="2" fill="#1a0f30" stroke="currentColor" stroke-width="1"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <!-- 03 CODE -->
-      <article class="chamber" data-room="code" data-agent="Code">
+      <!-- 04 CONTENT (gold · code terminal stage) -->
+      <article class="chamber" data-room="content" data-agent="Content">
         <div class="chamber__rim gold"></div>
         <div class="chamber__inner">
           <div class="chamber__head">
-            <span class="chamber__num">03</span>
-            <span class="chamber__name">CODE</span>
+            <span class="chamber__num">04</span>
+            <span class="chamber__name">CONTENT</span>
           </div>
-          <div class="chamber__task">Writing clean code...</div>
+          <div class="chamber__task">Drafting TikTok script…</div>
           <div class="chamber__stage chamber__stage--code">
             <div class="code-terminal">
-              <div class="ct-line"><span class="kw">const</span> <span class="var">api</span> = <span class="str">'/v2'</span>;</div>
-              <div class="ct-line"><span class="kw">async</span> <span class="fn">load</span>() {</div>
-              <div class="ct-line">&nbsp;&nbsp;<span class="kw">await</span> fetch(api);</div>
+              <div class="ct-line"><span class="kw">script</span> <span class="var">tiktok</span> = <span class="str">'rose petal wax'</span>;</div>
+              <div class="ct-line"><span class="kw">carousel</span> <span class="fn">draft</span>() {</div>
+              <div class="ct-line">&nbsp;&nbsp;<span class="kw">await</span> canva.api();</div>
               <div class="ct-line">}</div>
               <div class="ct-cursor"></div>
             </div>
             <div class="bot bot--gold">
               <svg viewBox="0 0 40 50">
                 <rect x="8" y="14" width="24" height="22" rx="4" fill="#3e2a0a" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="15" cy="24" r="2.2" fill="currentColor"/>
-                <circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
                 <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
                 <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
                 <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
@@ -384,15 +409,48 @@
         </div>
       </article>
 
-      <!-- 04 TEST -->
-      <article class="chamber" data-room="test" data-agent="Test">
+      <!-- 05 POSTER (gold · rocket / deploy stage) -->
+      <article class="chamber" data-room="poster" data-agent="Poster">
+        <div class="chamber__rim gold"></div>
+        <div class="chamber__inner">
+          <div class="chamber__head">
+            <span class="chamber__num">05</span>
+            <span class="chamber__name">POSTER</span>
+          </div>
+          <div class="chamber__task">Scheduling 7pm posts…</div>
+          <div class="chamber__stage chamber__stage--deploy">
+            <div class="deploy-pad">
+              <div class="d-rocket">
+                <div class="d-rocket__tip"></div><div class="d-rocket__body"></div>
+                <div class="d-rocket__fin l"></div><div class="d-rocket__fin r"></div>
+                <div class="d-rocket__window"></div><div class="d-rocket__fire"></div>
+              </div>
+              <div class="d-pad-base"></div>
+              <div class="d-launch-ring"></div>
+            </div>
+            <div class="bot bot--gold">
+              <svg viewBox="0 0 40 50">
+                <rect x="8" y="14" width="24" height="22" rx="4" fill="#3e2a0a" stroke="currentColor" stroke-width="1.2"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
+                <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
+                <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
+                <rect x="6" y="36" width="28" height="6" rx="2" fill="#1f1505" stroke="currentColor" stroke-width="1"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 06 PRODUCT (purple · test rack stage) -->
+      <article class="chamber" data-room="product" data-agent="Product">
         <div class="chamber__rim purple"></div>
         <div class="chamber__inner">
           <div class="chamber__head">
-            <span class="chamber__num">04</span>
-            <span class="chamber__name">TEST</span>
+            <span class="chamber__num">06</span>
+            <span class="chamber__name">PRODUCT</span>
           </div>
-          <div class="chamber__task">Running tests...</div>
+          <div class="chamber__task">Building Etsy listings…</div>
           <div class="chamber__stage chamber__stage--test">
             <div class="test-rack">
               <div class="rack-row"><span class="led g"></span><span class="led g"></span><span class="led g"></span><span class="led g"></span></div>
@@ -402,8 +460,7 @@
             <div class="bot bot--purple">
               <svg viewBox="0 0 40 50">
                 <rect x="8" y="14" width="24" height="22" rx="4" fill="#251a3e" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="15" cy="24" r="2.2" fill="currentColor"/>
-                <circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
                 <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
                 <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
                 <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
@@ -414,15 +471,15 @@
         </div>
       </article>
 
-      <!-- 05 QA (center) -->
-      <article class="chamber chamber--center" data-room="qa" data-agent="QA">
+      <!-- 07 MARKETING (cyan · qa orb / council stage) -->
+      <article class="chamber" data-room="marketing" data-agent="Marketing">
         <div class="chamber__rim cyan"></div>
         <div class="chamber__inner">
           <div class="chamber__head">
-            <span class="chamber__num">05</span>
-            <span class="chamber__name">QA</span>
+            <span class="chamber__num">07</span>
+            <span class="chamber__name">MARKETING</span>
           </div>
-          <div class="chamber__task">Validating quality...</div>
+          <div class="chamber__task">Running ads council…</div>
           <div class="chamber__stage chamber__stage--qa">
             <div class="qa-orb">
               <div class="qa-orb__core"></div>
@@ -432,8 +489,7 @@
             <div class="bot bot--cyan small">
               <svg viewBox="0 0 40 50">
                 <rect x="8" y="14" width="24" height="22" rx="4" fill="#1a2540" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="15" cy="24" r="2.2" fill="currentColor"/>
-                <circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
                 <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
                 <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
                 <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
@@ -444,52 +500,34 @@
         </div>
       </article>
 
-      <!-- 06 DEPLOY -->
-      <article class="chamber" data-room="deploy" data-agent="Deploy">
-        <div class="chamber__rim gold"></div>
+      <!-- 08 SALES (cyan · analytics bars stage) -->
+      <article class="chamber" data-room="sales" data-agent="Sales">
+        <div class="chamber__rim cyan"></div>
         <div class="chamber__inner">
           <div class="chamber__head">
-            <span class="chamber__num">06</span>
-            <span class="chamber__name">DEPLOY</span>
+            <span class="chamber__num">08</span>
+            <span class="chamber__name">SALES</span>
           </div>
-          <div class="chamber__task">Deploying to production...</div>
-          <div class="chamber__stage chamber__stage--deploy">
-            <div class="deploy-pad">
-              <div class="d-rocket">
-                <div class="d-rocket__tip"></div>
-                <div class="d-rocket__body"></div>
-                <div class="d-rocket__fin l"></div>
-                <div class="d-rocket__fin r"></div>
-                <div class="d-rocket__window"></div>
-                <div class="d-rocket__fire"></div>
-              </div>
-              <div class="d-pad-base"></div>
-              <div class="d-launch-ring"></div>
-            </div>
-            <div class="bot bot--gold">
-              <svg viewBox="0 0 40 50">
-                <rect x="8" y="14" width="24" height="22" rx="4" fill="#3e2a0a" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="15" cy="24" r="2.2" fill="currentColor"/>
-                <circle cx="25" cy="24" r="2.2" fill="currentColor"/>
-                <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
-                <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
-                <rect x="6" y="36" width="28" height="6" rx="2" fill="#1f1505" stroke="currentColor" stroke-width="1"/>
-              </svg>
+          <div class="chamber__task">Recovering carts…</div>
+          <div class="chamber__stage chamber__stage--analytics">
+            <div class="bar-viz">
+              <span style="--h:35%"></span><span style="--h:55%"></span><span style="--h:42%"></span>
+              <span style="--h:78%"></span><span style="--h:60%"></span><span style="--h:88%"></span>
+              <span style="--h:48%"></span><span style="--h:92%"></span>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- 07 VOICE AGENT -->
-      <article class="chamber" data-room="voice" data-agent="Voice">
+      <!-- 09 DJINN (cyan · voice ring stage — inbound) -->
+      <article class="chamber" data-room="djinn" data-agent="Djinn">
         <div class="chamber__rim cyan"></div>
         <div class="chamber__inner">
           <div class="chamber__head">
-            <span class="chamber__num">07</span>
-            <span class="chamber__name">VOICE AGENT</span>
+            <span class="chamber__num">09</span>
+            <span class="chamber__name">DJINN</span>
           </div>
-          <div class="chamber__task">Listening &amp; responding...</div>
+          <div class="chamber__task">Standing by for calls…</div>
           <div class="chamber__stage chamber__stage--voice">
             <div class="voice-ring">
               <div class="voice-ring__pulse"></div>
@@ -503,8 +541,7 @@
             <div class="bot bot--cyan small">
               <svg viewBox="0 0 40 50">
                 <rect x="8" y="14" width="24" height="22" rx="4" fill="#1a2540" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="15" cy="24" r="2.2" fill="currentColor"/>
-                <circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
                 <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
                 <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
                 <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
@@ -515,49 +552,34 @@
         </div>
       </article>
 
-      <!-- 08 CHATBOT -->
-      <article class="chamber" data-room="chatbot" data-agent="Chatbot">
-        <div class="chamber__rim purple"></div>
+      <!-- 10 OUTBOUND (gold · voice ring stage — outbound) -->
+      <article class="chamber" data-room="outbound" data-agent="Outbound">
+        <div class="chamber__rim gold"></div>
         <div class="chamber__inner">
           <div class="chamber__head">
-            <span class="chamber__num">08</span>
-            <span class="chamber__name">CHATBOT</span>
+            <span class="chamber__num">10</span>
+            <span class="chamber__name">OUTBOUND</span>
           </div>
-          <div class="chamber__task">Conversational AI active...</div>
-          <div class="chamber__stage chamber__stage--chatbot">
-            <div class="chatbox">
-              <div class="cb-bubble user">Hi! Quick question</div>
-              <div class="cb-bubble bot"><span class="cb-dots"><i></i><i></i><i></i></span></div>
+          <div class="chamber__task">30-day check-ins…</div>
+          <div class="chamber__stage chamber__stage--voice">
+            <div class="voice-ring">
+              <div class="voice-ring__pulse"></div>
+              <div class="voice-ring__pulse p2"></div>
+              <div class="voice-face">
+                <div class="vf-eye"></div>
+                <div class="vf-eye r"></div>
+                <div class="vf-mouth"></div>
+              </div>
             </div>
-            <div class="bot bot--purple">
+            <div class="bot bot--gold small">
               <svg viewBox="0 0 40 50">
-                <rect x="8" y="14" width="24" height="22" rx="4" fill="#251a3e" stroke="currentColor" stroke-width="1.2"/>
-                <circle cx="15" cy="24" r="2.2" fill="currentColor"/>
-                <circle cx="25" cy="24" r="2.2" fill="currentColor"/>
+                <rect x="8" y="14" width="24" height="22" rx="4" fill="#3e2a0a" stroke="currentColor" stroke-width="1.2"/>
+                <circle cx="15" cy="24" r="2.2" fill="currentColor"/><circle cx="25" cy="24" r="2.2" fill="currentColor"/>
                 <rect x="13" y="30" width="14" height="1.5" rx="0.5" fill="currentColor" opacity="0.6"/>
                 <line x1="20" y1="6" x2="20" y2="12" stroke="currentColor" stroke-width="1.2"/>
                 <circle cx="20" cy="5" r="1.6" fill="currentColor"/>
-                <rect x="6" y="36" width="28" height="6" rx="2" fill="#1a0f30" stroke="currentColor" stroke-width="1"/>
+                <rect x="6" y="36" width="28" height="6" rx="2" fill="#1f1505" stroke="currentColor" stroke-width="1"/>
               </svg>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <!-- 09 ANALYTICS -->
-      <article class="chamber" data-room="analytics" data-agent="Analytics">
-        <div class="chamber__rim cyan"></div>
-        <div class="chamber__inner">
-          <div class="chamber__head">
-            <span class="chamber__num">09</span>
-            <span class="chamber__name">ANALYTICS</span>
-          </div>
-          <div class="chamber__task">Insights &amp; reporting...</div>
-          <div class="chamber__stage chamber__stage--analytics">
-            <div class="bar-viz">
-              <span style="--h:35%"></span><span style="--h:55%"></span><span style="--h:42%"></span>
-              <span style="--h:78%"></span><span style="--h:60%"></span><span style="--h:88%"></span>
-              <span style="--h:48%"></span><span style="--h:92%"></span>
             </div>
           </div>
         </div>
@@ -621,46 +643,59 @@
     <div class="glass-panel">
       <div class="panel__head">
         <h3 class="panel__title">ACTIVE MISSIONS</h3>
-        <span class="muted-pill">3 OPEN</span>
+        <span class="muted-pill">4 OPEN</span>
       </div>
       <ul class="mission-list">
-        <li class="mission">
+        <li class="mission" data-mission="cheat-code">
           <div class="mission__icon gold">$</div>
           <div class="mission__body">
             <div class="mission__row">
               <div>
-                <div class="mission__title">Automate Code Review</div>
-                <div class="mission__reward">$2,000 Reward</div>
+                <div class="mission__title">Cheat Code PDF</div>
+                <div class="mission__reward">$2,910 launch</div>
               </div>
-              <div class="mission__pct">75%</div>
+              <div class="mission__pct">95%</div>
             </div>
-            <div class="mission__bar"><div class="mission__fill" style="--w:75%"></div></div>
+            <div class="mission__bar"><div class="mission__fill" style="--w:95%"></div></div>
           </div>
         </li>
-        <li class="mission">
+        <li class="mission" data-mission="sticker-vault">
           <div class="mission__icon purple">⬢</div>
           <div class="mission__body">
             <div class="mission__row">
               <div>
-                <div class="mission__title">Build AI Chat Assistant</div>
-                <div class="mission__reward">$1,500 Reward</div>
+                <div class="mission__title">Sticker Vault 500</div>
+                <div class="mission__reward">$5,400 TikTok Shop</div>
               </div>
-              <div class="mission__pct">60%</div>
+              <div class="mission__pct">0%</div>
             </div>
-            <div class="mission__bar"><div class="mission__fill purple" style="--w:60%"></div></div>
+            <div class="mission__bar"><div class="mission__fill purple" style="--w:0%"></div></div>
           </div>
         </li>
-        <li class="mission">
+        <li class="mission" data-mission="audiobook">
           <div class="mission__icon cyan">◇</div>
           <div class="mission__body">
             <div class="mission__row">
               <div>
-                <div class="mission__title">Optimize CI/CD Pipeline</div>
-                <div class="mission__reward">$2,500 Reward</div>
+                <div class="mission__title">Before They Burned Us</div>
+                <div class="mission__reward">$5,000 audiobook</div>
               </div>
-              <div class="mission__pct">40%</div>
+              <div class="mission__pct">10%</div>
             </div>
-            <div class="mission__bar"><div class="mission__fill cyan" style="--w:40%"></div></div>
+            <div class="mission__bar"><div class="mission__fill cyan" style="--w:10%"></div></div>
+          </div>
+        </li>
+        <li class="mission" data-mission="may-kit">
+          <div class="mission__icon gold">✦</div>
+          <div class="mission__body">
+            <div class="mission__row">
+              <div>
+                <div class="mission__title">May Nervous System Kit</div>
+                <div class="mission__reward">$2,700 · Apr 25</div>
+              </div>
+              <div class="mission__pct">0%</div>
+            </div>
+            <div class="mission__bar"><div class="mission__fill" style="--w:0%"></div></div>
           </div>
         </li>
       </ul>
