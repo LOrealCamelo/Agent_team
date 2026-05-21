@@ -166,11 +166,14 @@
   }
 
   const burst = $('mission-burst');
-  function triggerBurst() {
-    setText('burst-name', pick(PRODUCTS).toUpperCase());
+  function triggerBurst(productName) {
+    // Manual trigger only — bound to 'D' key + real Atlas/publish completions.
+    // Does NOT fake-increment shipped/revenue counters anymore — those were
+    // showing fictional sales numbers in the HUD.
+    const label = productName || pick(PRODUCTS);
+    setText('burst-name', label.toUpperCase());
     burst.classList.add('active');
-    state.products++; state.shipped++; state.revenue += rand(18, 45);
-    toast('ok', 'DEPLOYED', `${pick(PRODUCTS)} is live`);
+    toast('ok', 'DEPLOYED', `${label} is live`);
     setTimeout(() => burst.classList.remove('active'), 1800);
   }
 
@@ -429,9 +432,6 @@
   setInterval(() => { if (!apiMode) tick(); }, 800);
   setInterval(() => { if (!apiMode) pushFeed(); }, 2200);
   setInterval(drawSalesChart, 5000);
-  setInterval(triggerBurst, 22000);
-
-  setTimeout(() => toast('ok', 'BOOT', 'ULTRONOS online · 6 agents synced'), 600);
-  setTimeout(() => toast('info', 'PRINTIFY', 'Connection verified'), 2400);
-  setTimeout(() => toast('warn', 'LUMEN', 'Mockup #67 flagged for review'), 6800);
+  // Auto "DEPLOYED" burst removed — only fires now when YOU press the 'D'
+  // key or actually deploy a product. No more fake deploys every 22s.
 })();
